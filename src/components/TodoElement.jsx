@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { ListItem } from "@chakra-ui/layout";
 import { ListIcon } from "@chakra-ui/layout";
 import { Spacer } from "@chakra-ui/layout";
@@ -10,18 +10,33 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { Box } from "@chakra-ui/layout";
 import { Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
+import { useDispatch } from "react-redux";
+import { todoActions } from "../store/todos";
 
-const TodoElement = ({
-  onTodoClick,
-  onTodoEdit,
-  onTodoRemove,
-  todo,
-  index,
-  currentId,
-  setCurrentId,
-}) => {
+const TodoElement = ({ todo, index, currentId, setCurrentId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { id, description, task, createdAt, completed } = todo;
+
+  const dispatch = useDispatch();
+  const onTodoClick = useCallback(
+    (todo) => {
+      dispatch(todoActions.toggleCompleted(todo));
+    },
+    [dispatch]
+  );
+  const onTodoRemove = useCallback(
+    (id) => {
+      dispatch(todoActions.remove({ id }));
+    },
+    [dispatch]
+  );
+  const onTodoEdit = useCallback(
+    (todo) => {
+      dispatch(todoActions.edit(todo));
+    },
+    [dispatch]
+  );
+
   return (
     <>
       <Draggable key={id} index={index} draggableId={id.toString()}>

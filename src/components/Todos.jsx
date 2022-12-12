@@ -3,10 +3,14 @@ import { List } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/layout";
 import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
+import { useSelector } from "react-redux";
 import TodoElement from "./TodoElement";
 
-const Todos = ({ todos, onTodoClick, onTodoRemove, onTodoEdit }) => {
+const Todos = () => {
   const [currentId, setCurrentId] = useState("");
+  const todos = useSelector((state) => state.todos.todos);
+
+  console.log("re rendering todos");
 
   return (
     <>
@@ -23,10 +27,7 @@ const Todos = ({ todos, onTodoClick, onTodoRemove, onTodoEdit }) => {
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {todos.map((todo, index) => (
                     <TodoElement
-                    key={index}
-                      onTodoClick={onTodoClick}
-                      onTodoRemove={onTodoRemove}
-                      onTodoEdit={onTodoEdit}
+                      key={index}
                       todo={todo}
                       currentId={currentId}
                       setCurrentId={setCurrentId}
